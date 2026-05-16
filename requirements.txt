@@ -6,12 +6,4 @@ fpdf
 requests
 yt-dlp
 feedparser
-python-telegram-bot==13.15
-qrcode
-pillow
-pyzbar
-fpdf
-requests
-yt-dlp
-feedparser
 imghdr
