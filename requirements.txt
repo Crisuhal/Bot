@@ -6,4 +6,3 @@ fpdf
 requests
 yt-dlp
 feedparser
-imghdr
