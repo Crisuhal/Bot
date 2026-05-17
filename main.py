@@ -1,16 +1,24 @@
-from telegram.ext import Updater, CommandHandler
-import os
+from flask import Flask, request, jsonify
+import yt_dlp
 
-def start(update, context):
-    update.message.reply_text("Hola buenas!")
+app = Flask(__name__)
 
-def main():
-    token = os.getenv("TELEGRAM_TOKEN")
-    updater = Updater(token, use_context=True)
-    dp = updater.dispatcher
-    dp.add_handler(CommandHandler("start", start))
-    updater.start_polling()
-    updater.idle()
+@app.route("/api/audio", methods=["POST"])
+def audio():
+    data = request.get_json()
+    url = data.get("url")
+    output = "/tmp/audio.mp3"
 
-if __name__ == "__main__":
-    main()
+    opciones = {
+        'format': 'bestaudio/best',
+        'outtmpl': output,
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+    with yt_dlp.YoutubeDL(opciones) as ydl:
+        ydl.download([url])
+
+    return jsonify({"audio_url": "https://tu-app.vercel.app/audio.mp3"})
